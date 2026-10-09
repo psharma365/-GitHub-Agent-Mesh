@@ -37,6 +37,18 @@ func (d *Dispatcher) Execute(ctx context.Context, action, owner, repo string) (m
 			return nil, err
 		}
 		return map[string]any{"action": action, "workflow_runs": runs}, nil
+	case "insight":
+		insight, err := d.client.Insight(ctx, owner, repo)
+		if err != nil {
+			return nil, err
+		}
+		return map[string]any{"action": action, "insight": insight}, nil
+	case "security":
+		signal, err := d.client.SecuritySignals(ctx, owner, repo)
+		if err != nil {
+			return nil, err
+		}
+		return map[string]any{"action": action, "security": signal}, nil
 	case "summary", "":
 		repos, err := d.client.Repositories(ctx, owner)
 		if err != nil {
@@ -50,6 +62,14 @@ func (d *Dispatcher) Execute(ctx context.Context, action, owner, repo string) (m
 		if err != nil {
 			return nil, err
 		}
+		insight, err := d.client.Insight(ctx, owner, repo)
+		if err != nil {
+			return nil, err
+		}
+		security, err := d.client.SecuritySignals(ctx, owner, repo)
+		if err != nil {
+			return nil, err
+		}
 		return map[string]any{
 			"action": "summary",
 			"owner": owner,
@@ -57,6 +77,8 @@ func (d *Dispatcher) Execute(ctx context.Context, action, owner, repo string) (m
 			"repositories": repos,
 			"issues": issues,
 			"workflow_runs": runs,
+			"insight": insight,
+			"security": security,
 		}, nil
 	default:
 		return nil, fmt.Errorf("unsupported action: %s", action)
