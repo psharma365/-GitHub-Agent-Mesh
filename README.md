@@ -43,6 +43,22 @@ Modern software teams need AI systems that can reason over GitHub context withou
 go run ./cmd/github-agent-mesh --owner psharma365 --repo -GitHub-Agent-Mesh --action summary --token "$GITHUB_TOKEN"
 ```
 
+### Example actions
+
+```bash
+# list repositories owned by the user
+ go run ./cmd/github-agent-mesh --owner psharma365 --repo -GitHub-Agent-Mesh --action repositories --token "$GITHUB_TOKEN"
+
+# inspect open issues in a target repository
+ go run ./cmd/github-agent-mesh --owner github --repo github-mcp-server --action issues --token "$GITHUB_TOKEN"
+
+# review latest workflow execution state
+ go run ./cmd/github-agent-mesh --owner github --repo github-mcp-server --action workflows --token "$GITHUB_TOKEN"
+
+# request a compact engineering-summary snapshot
+ go run ./cmd/github-agent-mesh --owner github --repo github-mcp-server --action insight --token "$GITHUB_TOKEN"
+```
+
 ## Environment variables
 
 ```bash
@@ -60,3 +76,7 @@ The project is intentionally structured around three layers:
 3. orchestration logic that translates user intent into tool execution
 
 This keeps the codebase readable, testable, and suitable for AI-driven product work.
+
+## Development notes
+
+The repo is built to feel like a real product progression rather than a single bulk commit. The internal milestones are documented in `COMMIT_PLAN.md`, which tracks a sequence of feature-oriented commits for docs, setup, integrations, and validation.
